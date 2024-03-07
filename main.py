@@ -1,0 +1,57 @@
+import bs4
+import requests
+
+
+def main():
+    input_txt = open("input.txt", "r", encoding="utf-8")
+    lines = input_txt.readlines()
+    output = ""
+
+    for line in lines:
+        line_strip = line.strip()
+
+        if not line_strip:
+            continue
+
+        line_split = line_strip.split()
+
+        if len(line_split) != 2:
+            continue
+
+        word = line_split[0].strip()
+        part_of_speech = line_split[1].strip("()")
+
+        response = requests.get(f"https://www.google.com/search?q={word}+definition")
+        soup = bs4.BeautifulSoup(response.text, "html.parser")
+        definitions = soup.body.find_all(class_="Ap5OSd")
+
+        if not definitions:
+            continue
+
+        for index, definition in enumerate(definitions):
+            span = definition.find("span", class_="r0bn4c rQMQod")
+
+            if not span:
+                continue
+
+            string = str(span.string).strip().split()
+
+            if len(string) != 1:
+                continue
+
+            if not string[0].startswith(part_of_speech):
+                continue
+
+            definition = definitions[index + 1].find("div", class_="BNeawe s3v9rd AP7Wnd")
+            output += f"{word} ({part_of_speech}): {definition.string}\n"
+            break
+
+    input_txt.close()
+
+    output_txt = open("output.txt", "w", encoding="utf-8")
+    output_txt.write(output)
+    output_txt.close()
+
+
+if __name__ == "__main__":
+    main()
