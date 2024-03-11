@@ -21,6 +21,11 @@ def main():
         word = line_split[0].strip()
         part_of_speech = line_split[1].strip("()")
 
+        if part_of_speech == "j":
+            part_of_speech = "adj"
+        elif part_of_speech == "r":
+            part_of_speech = "adv"
+
         response = requests.get(f"https://www.google.com/search?q={word}+definition")
         soup = bs4.BeautifulSoup(response.text, "html.parser")
         definitions = soup.body.find_all(class_="Ap5OSd")
@@ -43,7 +48,7 @@ def main():
                 continue
 
             definition = definitions[index + 1].find("div", class_="BNeawe s3v9rd AP7Wnd")
-            output += f"{word} ({part_of_speech}): {definition.string}\n"
+            output += f"{word.capitalize()} ({part_of_speech}): {definition.string}\n"
             break
 
     input_txt.close()
