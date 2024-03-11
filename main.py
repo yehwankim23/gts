@@ -6,8 +6,9 @@ def main():
     input_txt = open("input.txt", "r", encoding="utf-8")
     lines = input_txt.readlines()
     output = ""
+    number_of_lines = len(lines)
 
-    for line in lines:
+    for line_number, line in enumerate(lines):
         line_strip = line.strip()
 
         if not line_strip:
@@ -50,6 +51,8 @@ def main():
             definition = definitions[index + 1].find("div", class_="BNeawe s3v9rd AP7Wnd")
             output += f"{word.capitalize()} ({part_of_speech}): {definition.string}\n"
             break
+
+        print(f"{line_number + 1}/{number_of_lines} ({(line_number + 1) / number_of_lines * 100}%)")
 
     input_txt.close()
 
