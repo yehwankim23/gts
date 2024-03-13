@@ -34,6 +34,8 @@ def main():
         if not definitions:
             continue
 
+        number = line_number + 1
+
         for index, definition in enumerate(definitions):
             span = definition.find("span", class_="r0bn4c rQMQod")
 
@@ -49,10 +51,11 @@ def main():
                 continue
 
             definition = definitions[index + 1].find("div", class_="BNeawe s3v9rd AP7Wnd")
-            output += f"{word.capitalize()} ({part_of_speech}): {definition.string}\n"
+
+            output += f"{number}. {word.capitalize()} ({part_of_speech}): {definition.string}\n"
             break
 
-        print(f"{line_number + 1}/{number_of_lines} ({(line_number + 1) / number_of_lines * 100}%)")
+        print(f"{number}/{number_of_lines} ({number / number_of_lines * 100}%)")
 
     input_txt.close()
 
