@@ -6,9 +6,12 @@ def main():
     input_txt = open("input.txt", "r", encoding="utf-8")
     lines = input_txt.readlines()
     output = ""
+    number = 1
     number_of_lines = len(lines)
 
     for line_number, line in enumerate(lines):
+        progress = line_number + 1
+        print(f"{progress}/{number_of_lines} ({progress / number_of_lines * 100}%)")
         line_strip = line.strip()
 
         if not line_strip:
@@ -34,8 +37,6 @@ def main():
         if not definitions:
             continue
 
-        number = line_number + 1
-
         for index, definition in enumerate(definitions):
             span = definition.find("span", class_="r0bn4c rQMQod")
 
@@ -51,14 +52,11 @@ def main():
                 continue
 
             definition = definitions[index + 1].find("div", class_="BNeawe s3v9rd AP7Wnd")
-
             output += f"{number}. {word.capitalize()} ({part_of_speech}): {definition.string}\n"
+            number += 1
             break
 
-        print(f"{number}/{number_of_lines} ({number / number_of_lines * 100}%)")
-
     input_txt.close()
-
     output_txt = open("output.txt", "w", encoding="utf-8")
     output_txt.write(output)
     output_txt.close()
